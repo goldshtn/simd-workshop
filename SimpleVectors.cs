@@ -55,5 +55,26 @@ namespace simd_workshop
             // TODO Implement this
             return 0.0f;
         }
+
+        [Benchmark]
+        public void MatrixMult()
+        {
+            for (int i = 0; i < 64; ++i)
+            {
+                for (int k = 0; k < 64; ++k)
+                {
+                    for (int j = 0; j < 64; ++j)
+                    {
+                        c[i * 64 + j] += a[i * 64 + k] * b[k * 64 + j];
+                    }
+                }
+            }
+        }
+
+        [Benchmark]
+        public void MatrixMultSimd()
+        {
+            // TODO Implement this
+        }
     }
 }
