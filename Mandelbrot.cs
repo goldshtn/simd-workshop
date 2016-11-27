@@ -85,17 +85,19 @@ namespace simd_workshop
                         // This is vector multiplication and addition
                         vZ = vZ * vZ + vC;
 
-                        vIters += vIncrement;
+                        // TODO Increment the number of iterations so far, for the elements
+                        //      that haven't been phased out yet (magnitude less than threshold).
+                        vIters += Vector<int>.Zero;
 
-                        // Which vZ's have magnitude less than the threshold?
-                        Vector<int> vLessThanThreshold = Vector.LessThanOrEqual(vZ.MagnitudeSquared, vThreshold);
-                        // Which vIters have # iterations less than the maximum?
-                        Vector<int> vLessThanMaxIters = Vector.LessThanOrEqual(vIters, vMaxIters);
-                        // Which elements should proceed to the next iteration?
-                        Vector<int> vShouldContinue = vLessThanThreshold & vLessThanMaxIters;
-                        
-                        // Which vIters elements should be incremented in the next iteration?
-                        vIncrement &= vShouldContinue;
+                        // TODO Which vZ's have magnitude less than the threshold?
+                        Vector<int> vLessThanThreshold = Vector<int>.Zero;
+                        // TODO Which vIters have # iterations less than the maximum?
+                        Vector<int> vLessThanMaxIters = Vector<int>.Zero;
+                        // TODO Which elements should proceed to the next iteration?
+                        Vector<int> vShouldContinue = Vector<int>.Zero;
+
+                        // TODO Which vIters elements should be incremented in the next iteration?
+                        vIncrement &= Vector<int>.Zero;
                     }
                     while (vIncrement != Vector<int>.Zero);
 
