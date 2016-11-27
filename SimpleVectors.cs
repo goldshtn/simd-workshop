@@ -13,6 +13,21 @@ namespace simd_workshop
         private readonly float[] a = new float[4096];
         private readonly float[] b = new float[4096];
         private readonly float[] c = new float[4096];
+        private readonly Point3[] pts = new Point3[4096];
+
+        [Setup]
+        public void Setup()
+        {
+            var rand = new Random(42);
+            for (int i = 0; i < a.Length; ++i)
+            {
+                a[i] = b[i] = c[i] = (float)rand.NextDouble();
+                pts[i] = new Point3
+                {
+                    X = a[i], Y = b[i], Z = c[i]
+                };
+            }
+        }
 
         [Benchmark]
         public void AddVectors()
@@ -76,5 +91,32 @@ namespace simd_workshop
         {
             // TODO Implement this
         }
+
+        [Benchmark]
+        public void VectorNorm()
+        {
+            for (int i = 0; i < pts.Length; ++i)
+            {
+                Point3 pt = pts[i];
+                float norm = (float)Math.Sqrt(pt.X * pt.X + pt.Y * pt.Y + pt.Z * pt.Z);
+                pt.X /= norm;
+                pt.Y /= norm;
+                pt.Z /= norm;
+                pts[i] = pt;
+            }
+        }
+
+        [Benchmark]
+        public void VectorNormSimd()
+        {
+            // TODO Implement this
+        }
+    }
+
+    struct Point3
+    {
+        public float X;
+        public float Y;
+        public float Z;
     }
 }
