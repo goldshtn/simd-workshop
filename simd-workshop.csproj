@@ -143,6 +143,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Mandelbrot.cs" />
+    <Compile Include="Particles.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimpleVectors.cs" />

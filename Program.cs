@@ -12,6 +12,8 @@ namespace simd_workshop
         static void Main(string[] args)
         {
             BenchmarkRunner.Run<SimpleVectors>();
+            // BenchmarkRunner.Run<Mandelbrot>();
+            // BenchmarkRunner.Run<Particles>();
         }
     }
 }
