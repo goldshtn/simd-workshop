@@ -143,7 +143,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdvancedVectors.cs" />
+    <Compile Include="BranchPrediction.cs" />
     <Compile Include="Mandelbrot.cs" />
+    <Compile Include="MinMax.cs" />
     <Compile Include="Particles.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
