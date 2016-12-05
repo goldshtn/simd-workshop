@@ -14,14 +14,6 @@ namespace simd_workshop
         private const int COLS = 1024;
         private float[] _image = new float[ROWS * COLS];
         private float[] _rotated = new float[ROWS * COLS];
-        private const int STEPS = 1000000;
-        private const double FROM = 0.0;
-        private const double TO = 1.0;
-
-        private static double Function(double x)
-        {
-            return 4.0 / (1 + x * x);
-        }
 
         [Setup]
         public void Setup()
@@ -66,81 +58,6 @@ namespace simd_workshop
                     }
                 }
             }
-        }
-
-        [Benchmark]
-        public double IntegrateSequential()
-        {
-            Func<double, double> f = Function;
-            double integral = 0.0;
-            double stepSize = (TO - FROM) / STEPS;
-            for (int i = 0; i < STEPS; ++i)
-            {
-                integral += stepSize * f(FROM + ((i + 0.5) * stepSize));
-            }
-            return integral;
-        }
-
-        [Benchmark]
-        public double IntegrateParallelSharing()
-        {
-            int parallelism = Environment.ProcessorCount;
-            double[] partialIntegrals = new double[parallelism];
-            double stepSize = (TO - FROM) / STEPS;
-            double chunkSize = (TO - FROM) / parallelism;
-            int chunkSteps = STEPS / parallelism;
-
-            Thread[] threads = new Thread[parallelism];
-            for (int i = 0; i < parallelism; ++i)
-            {
-                double myFrom = FROM + i * chunkSize;
-                double myTo = myFrom + chunkSize;
-                int myIndex = i;
-                threads[i] = new Thread(() =>
-                {
-                    Func<double, double> f = Function;
-                    for (int k = 0; k < STEPS; ++k)
-                    {
-                        partialIntegrals[myIndex] += stepSize * f(FROM + ((k + 0.5) * stepSize));
-                    }
-                });
-                threads[i].Start();
-            }
-
-            foreach (var thread in threads) thread.Join();
-            return partialIntegrals.Sum();
-        }
-
-        [Benchmark]
-        public double IntegrateParallelPrivate()
-        {
-            int parallelism = Environment.ProcessorCount;
-            double[] partialIntegrals = new double[parallelism];
-            double stepSize = (TO - FROM) / STEPS;
-            double chunkSize = (TO - FROM) / parallelism;
-            int chunkSteps = STEPS / parallelism;
-
-            Thread[] threads = new Thread[parallelism];
-            for (int i = 0; i < parallelism; ++i)
-            {
-                double myFrom = FROM + i * chunkSize;
-                double myTo = myFrom + chunkSize;
-                int myIndex = i;
-                threads[i] = new Thread(() =>
-                {
-                    Func<double, double> f = Function;
-                    double myIntegral = 0.0;
-                    for (int k = 0; k < STEPS; ++k)
-                    {
-                        myIntegral += stepSize * f(FROM + ((k + 0.5) * stepSize));
-                    }
-                    partialIntegrals[myIndex] = myIntegral;
-                });
-                threads[i].Start();
-            }
-
-            foreach (var thread in threads) thread.Join();
-            return partialIntegrals.Sum();
         }
     }
 }

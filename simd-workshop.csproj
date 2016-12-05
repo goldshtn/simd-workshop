@@ -145,6 +145,7 @@
     <Compile Include="AdvancedVectors.cs" />
     <Compile Include="BranchPrediction.cs" />
     <Compile Include="Cache.cs" />
+    <Compile Include="CacheInvalidation.cs" />
     <Compile Include="Mandelbrot.cs" />
     <Compile Include="MinMax.cs" />
     <Compile Include="Particles.cs" />
