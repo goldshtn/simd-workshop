@@ -12,11 +12,12 @@ namespace simd_workshop
         static void Main(string[] args)
         {
             // BenchmarkRunner.Run<BranchPrediction>();
-            BenchmarkRunner.Run<MinMax>();
+            // BenchmarkRunner.Run<MinMax>();
+            // BenchmarkRunner.Run<Cache>();
             // BenchmarkRunner.Run<SimpleVectors>();
             // BenchmarkRunner.Run<Mandelbrot>();
             // BenchmarkRunner.Run<Particles>();
-            // BenchmarkRunner.Run<AdvancedVectors>();
+            BenchmarkRunner.Run<AdvancedVectors>();
         }
     }
 }

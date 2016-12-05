@@ -144,6 +144,7 @@
   <ItemGroup>
     <Compile Include="AdvancedVectors.cs" />
     <Compile Include="BranchPrediction.cs" />
+    <Compile Include="Cache.cs" />
     <Compile Include="Mandelbrot.cs" />
     <Compile Include="MinMax.cs" />
     <Compile Include="Particles.cs" />

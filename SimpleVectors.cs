@@ -10,9 +10,10 @@ namespace simd_workshop
 {
     public class SimpleVectors
     {
-        private readonly float[] a = new float[4096];
-        private readonly float[] b = new float[4096];
-        private readonly float[] c = new float[4096];
+        private const int MATRIX_SHAPE = 512;
+        private readonly float[] a = new float[MATRIX_SHAPE * MATRIX_SHAPE];
+        private readonly float[] b = new float[MATRIX_SHAPE * MATRIX_SHAPE];
+        private readonly float[] c = new float[MATRIX_SHAPE * MATRIX_SHAPE];
         private readonly Point3[] pts = new Point3[4096];
 
         [Setup]
@@ -22,9 +23,12 @@ namespace simd_workshop
             for (int i = 0; i < a.Length; ++i)
             {
                 a[i] = b[i] = c[i] = (float)rand.NextDouble();
+            }
+            for (int i = 0; i < pts.Length; ++i)
+            {
                 pts[i] = new Point3
                 {
-                    X = a[i], Y = b[i], Z = c[i]
+                    X = (float)rand.NextDouble(), Y = (float)rand.NextDouble(), Z = (float)rand.NextDouble()
                 };
             }
         }
@@ -72,15 +76,30 @@ namespace simd_workshop
         }
 
         [Benchmark]
-        public void MatrixMult()
+        public void MatrixMultNaive()
         {
-            for (int i = 0; i < 64; ++i)
+            for (int i = 0; i < MATRIX_SHAPE; ++i)
             {
-                for (int k = 0; k < 64; ++k)
+                for (int j = 0; j < MATRIX_SHAPE; ++j)
                 {
-                    for (int j = 0; j < 64; ++j)
+                    for (int k = 0; k < MATRIX_SHAPE; ++k)
                     {
-                        c[i * 64 + j] += a[i * 64 + k] * b[k * 64 + j];
+                        c[i * MATRIX_SHAPE + j] += a[i * MATRIX_SHAPE + k] * b[k * MATRIX_SHAPE + j];
+                    }
+                }
+            }
+        }
+
+        [Benchmark]
+        public void MatrixMultReorg()
+        {
+            for (int i = 0; i < MATRIX_SHAPE; ++i)
+            {
+                for (int k = 0; k < MATRIX_SHAPE; ++k)
+                {
+                    for (int j = 0; j < MATRIX_SHAPE; ++j)
+                    {
+                        c[i * MATRIX_SHAPE + j] += a[i * MATRIX_SHAPE + k] * b[k * MATRIX_SHAPE + j];
                     }
                 }
             }
@@ -89,7 +108,21 @@ namespace simd_workshop
         [Benchmark]
         public void MatrixMultSimd()
         {
-            // TODO Implement this
+            int vecSize = Vector<float>.Count;
+            for (int i = 0; i < MATRIX_SHAPE; ++i)
+            {
+                for (int k = 0; k < MATRIX_SHAPE; ++k)
+                {
+                    Vector<float> va = new Vector<float>(a[i * MATRIX_SHAPE + k]);
+                    for (int j = 0; j < MATRIX_SHAPE; j += vecSize)
+                    {
+                        Vector<float> vb = new Vector<float>(b, k * MATRIX_SHAPE + j);
+                        Vector<float> vc = new Vector<float>(c, i * MATRIX_SHAPE + j);
+                        vc += va * vb;
+                        vc.CopyTo(c, i * MATRIX_SHAPE + j);
+                    }
+                }
+            }
         }
 
         [Benchmark]

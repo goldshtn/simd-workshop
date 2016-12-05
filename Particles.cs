@@ -72,7 +72,7 @@ namespace simd_workshop
             Vec3 diff = Position - other.Position;
             float r2 = (diff * diff).Sum();
             diff = diff * (1.0f / ((float)Math.Sqrt(r2) * (r2 + 1.0f)));
-            Acceleration = Acceleration - diff * Mass;
+            Acceleration = Acceleration - diff * other.Mass;
             other.Acceleration = other.Acceleration + diff * Mass;
         }
     }
