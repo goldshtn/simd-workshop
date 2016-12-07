@@ -15,6 +15,9 @@ namespace simd_workshop
         private readonly float[] b = new float[MATRIX_SHAPE * MATRIX_SHAPE];
         private readonly float[] c = new float[MATRIX_SHAPE * MATRIX_SHAPE];
         private readonly Point3[] pts = new Point3[4096];
+        private readonly float[] xs = new float[4096];
+        private readonly float[] ys = new float[4096];
+        private readonly float[] zs = new float[4096];
 
         [Setup]
         public void Setup()
@@ -26,9 +29,14 @@ namespace simd_workshop
             }
             for (int i = 0; i < pts.Length; ++i)
             {
+                xs[i] = (float)rand.NextDouble();
+                ys[i] = (float)rand.NextDouble();
+                zs[i] = (float)rand.NextDouble();
                 pts[i] = new Point3
                 {
-                    X = (float)rand.NextDouble(), Y = (float)rand.NextDouble(), Z = (float)rand.NextDouble()
+                    X = xs[i],
+                    Y = ys[i],
+                    Z = zs[i]
                 };
             }
         }
@@ -142,7 +150,20 @@ namespace simd_workshop
         [Benchmark]
         public void VectorNormSimd()
         {
-            // TODO Implement this
+            int vecSize = Vector<float>.Count;
+            for (int i = 0; i < xs.Length; i += vecSize)
+            {
+                Vector<float> x = new Vector<float>(xs, i);
+                Vector<float> y = new Vector<float>(ys, i);
+                Vector<float> z = new Vector<float>(zs, i);
+                Vector<float> norm = Vector.SquareRoot(x * x + y * y + z * z);
+                x /= norm;
+                y /= norm;
+                z /= norm;
+                x.CopyTo(xs, i);
+                y.CopyTo(ys, i);
+                z.CopyTo(zs, i);
+            }
         }
     }
 
