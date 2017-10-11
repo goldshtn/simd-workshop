@@ -150,20 +150,7 @@ namespace simd_workshop
         [Benchmark]
         public void VectorNormSimd()
         {
-            int vecSize = Vector<float>.Count;
-            for (int i = 0; i < xs.Length; i += vecSize)
-            {
-                Vector<float> x = new Vector<float>(xs, i);
-                Vector<float> y = new Vector<float>(ys, i);
-                Vector<float> z = new Vector<float>(zs, i);
-                Vector<float> norm = Vector.SquareRoot(x * x + y * y + z * z);
-                x /= norm;
-                y /= norm;
-                z /= norm;
-                x.CopyTo(xs, i);
-                y.CopyTo(ys, i);
-                z.CopyTo(zs, i);
-            }
+            // TODO Implement this
         }
     }
 
